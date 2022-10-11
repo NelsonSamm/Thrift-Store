@@ -8,12 +8,12 @@ import { newKitFromWeb3 } from "@celo/contractkit";
 import BigNumber from "bignumber.js";
 import IERC from "./contract/IERC.abi.json";
 import Thrift from "./contract/Thrift.abi.json";
-import AddProduct from "./components/AddProduct";
+import AddProducts from "./components/AddProducts";
 import Products from "./components/Products";
 
 const ERC20_DECIMALS = 18;
 
-const contractAddress = "0x7146A7ab6fF21B39D4eb6Ad8914A07634e7a5bbC";
+const contractAddress = "0x232400AA44aD26a5Db1fCe21697879297D683963";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
 function App() {
@@ -72,6 +72,7 @@ function App() {
 				contractAddress
 			);
 			setcontract(contract);
+			console.log(contract);
 			setcUSDBalance(USDBalance);
 		} catch (error) {
 			console.log(error);
@@ -79,8 +80,8 @@ function App() {
 	};
 
 	const getProducts = async () => {
-		const thriftsLength = await contract.methods.gethriftsLength().call();
-		console.log(thriftsLength);
+		console.log(contract);
+		const thriftsLength = await contract.methods.getThriftsLength().call();
 		const _tit = [];
 		for (let index = 0; index < thriftsLength; index++) {
 			let _products = new Promise(async (resolve, reject) => {
@@ -93,29 +94,44 @@ function App() {
 					location: product[2],
 					serviceOption: product[3],
 					phone: product[4],
-					price:product[5]
+					price:product[5],
+					sale:product[6]
+					 
 				});
 			});
 			_tit.push(_products);
 		}
 		const _products = await Promise.all(_tit);
 		setProducts(_products);
-		console.log(products);
+		 
 	};
+	
+ 
+	
 
-	const addProduct = async (_url, _location, _serviceOption, _phone, price) => {
+	const AddProduct = async (_url, _location, _serviceoption, _phone, price) => {
 		const _price = new BigNumber(price)
 			.shiftedBy(ERC20_DECIMALS)
 			.toString();
 		try {
 			await contract.methods
-				.addProduct(_url, _location, _serviceOption, _phone, _price)
+				.addProduct(_url, _location, _serviceoption, _phone, _price)
 				.send({ from: address });
 			getProducts();
 		} catch (error) {
 			console.log(error);
 		}
-	
+	};
+
+	const UnlistProduct = async (_index) => {
+		try {
+			await contract.methods.unlistProduct(_index).send({ from: address });
+			getProducts();
+			getBalance();
+		} catch (error) {
+			alert(error);
+		}
+	};
 	 
  
 	const buyProduct = async (_index) => {
@@ -137,22 +153,22 @@ function App() {
 	};
 
 	return (
-		
-		
-			<div>
+		<div>
 				<Navbar balance={cUSDBalance} />
 
 				<Products
 					products={products}
 					buyProduct={buyProduct}
+					UnlistProduct={UnlistProduct}
+					onlyOwner={address}
 				
 				/>
-				<AddProduct addProduct={addProduct} />
+				<AddProducts AddProduct={AddProduct} /> 
 			</div>
 	
 	
 );
-	}
+	
 }
 
 export default App;

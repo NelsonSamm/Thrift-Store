@@ -5,49 +5,70 @@
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "newTick",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
 				"name": "seller",
 				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
 			},
 			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "buyer",
 				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
 			}
 		],
-		"name": "ticketBought",
+		"name": "buyProductEvent",
 		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "productId",
+				"type": "uint256"
+			}
+		],
+		"name": "unlistProductEvent",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_url",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_location",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_serviceOption",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_phone",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			}
+		],
+		"name": "addProduct",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -57,7 +78,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "buyTicket",
+		"name": "buyProduct",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
@@ -70,32 +91,42 @@
 				"type": "uint256"
 			}
 		],
-		"name": "getTicket",
+		"name": "getProduct",
 		"outputs": [
 			{
 				"internalType": "address payable",
-				"name": "",
+				"name": "creator",
 				"type": "address"
 			},
 			{
 				"internalType": "string",
-				"name": "",
+				"name": "url",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "",
+				"name": "location",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "",
+				"name": "serviceOption",
 				"type": "string"
 			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "phone",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "sale",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -103,7 +134,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "getticketsLength",
+		"name": "getThriftsLength",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -117,27 +148,12 @@
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_image",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_fixture",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_venue",
-				"type": "string"
-			},
-			{
 				"internalType": "uint256",
-				"name": "_price",
+				"name": "_index",
 				"type": "uint256"
 			}
 		],
-		"name": "newTicket",
+		"name": "toggleSale",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -150,25 +166,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "toggleSaleStatus",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			}
-		],
-		"name": "updateTicketCost",
+		"name": "unlistProduct",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

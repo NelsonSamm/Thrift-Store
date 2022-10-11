@@ -1,13 +1,14 @@
 import React from 'react'
-
 import { useState } from "react";
 
+ 
+
 const AddProducts = (props) => {
-const [url, setUrl] = useState('');
- const [location, setLocation] = useState('');
- const [serviceOption, setServiceOption] = useState('');
- const [phone, setPhone] = useState();
- const [price, setPrice] = useState();
+const [url, setUrl] = useState("");
+ const [location, setLocation] = useState("");
+ const [serviceOption, setServiceOption] = useState("");
+ const [phone, setPhone] = useState("");
+ const [price, setPrice] = useState("");
 
  const submitHandler = (e) => {
     e.preventDefault();
@@ -17,11 +18,11 @@ const [url, setUrl] = useState('');
         return
 
     }
-    props.addProduct(url, location, serviceOption, phone, price);
+    props.AddProduct(url, location, serviceOption, phone, price);
     
     setUrl('')
     setLocation('')
-    serviceOption('')
+    setServiceOption('')
     setPhone('')
     setPrice('')
 };
