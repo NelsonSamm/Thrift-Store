@@ -80,7 +80,7 @@ function App() {
 	};
 
 	const getProducts = async () => {
-		console.log(contract);
+		 
 		const thriftsLength = await contract.methods.getThriftsLength().call();
 		const _tit = [];
 		for (let index = 0; index < thriftsLength; index++) {
