@@ -1,5 +1,3 @@
-  // SPDX-License-Identifier: MIT
-
 pragma solidity >=0.7.0 <0.9.0;
 
 interface IERC20Token {
@@ -77,76 +75,27 @@ contract Thriftly {
         * @dev allow users to buy products found in a thrift store
      */
       function buyProduct(uint _index) public payable  {
+        Thrift storage currentThrift = thrifts[_index];
+        require(!currentThrift.sale, "Product already sold");
         require(
-          IERC20Token(cUsdTokenAddress).transferFrom(
-            msg.sender,
-            thrifts[_index].creator,
-             thrifts[_index].price
-          ),
-          "Transfer failed."
+            IERC20Token(cUsdTokenAddress).transferFrom(
+                msg.sender,
+                currentThrift.creator,
+                currentThrift.price
+            ),
+            "Transfer failed."
         );
 
-        address seller = thrifts[_index].creator;
+        address seller = currentThrift.creator;
         address buyer = msg.sender;
 
-       thrifts[_index].creator = payable(msg.sender);
+        currentThrift.creator = payable(msg.sender);
+        currentThrift.sale = true;
 
-       emit buyProductEvent(seller, buyer, _index);
-         
-    
- 
+        emit buyProductEvent(seller, buyer, _index);
     }
 
       function unlistProduct(uint _index) external {
-        require(msg.sender == thrifts[_index].creator, "Only owner can unlist");
-        thrifts[_index] = thrifts[thriftsLength - 1];
-        delete thrifts[thriftsLength - 1];
-        thriftsLength--;
-
-        emit unlistProductEvent(_index);
-    }
-
-
-    /**
-        * @dev allow users to add a product on the platform
-        * @notice input strings needs to be valid values
-     */
-    function addProduct(
-        string calldata _url,
-        string calldata _location,
-        string calldata _serviceOption,
-        uint256 _phone,
-        uint256 _price
-    ) public {
-        require(bytes(_url).length > 0, "Empty url");
-        require(bytes(_location).length > 0, "Empty location");
-        require(bytes(_serviceOption).length > 0, "Empty service option");
-        Thrift storage thrift = thrifts[thriftsLength];
-        thriftsLength++;
-
-        thrift.creator = payable(msg.sender);
-        thrift.url = _url;
-        thrift.location = _location;
-        thrift.serviceOption = _serviceOption;
-        thrift.phone = _phone;
-        thrift.price = _price;
-    }
-
-    /**
-        * @dev allows products' owners to toggle the sale status of their product
-     */
-    function toggleSale(uint256 _index) public {
         Thrift storage currentThrift = thrifts[_index];
-        require(
-            msg.sender == currentThrift.creator,
-            "only the creator can access this function"
-        );
-        currentThrift.sale = !currentThrift.sale;
-    }
-
-
-
-    function getThriftsLength() public view returns (uint256) {
-        return thriftsLength;
-    }
-}
+        require(msg.sender == currentThrift.creator, "Only owner can unlist");
+        require(!currentThrift.sale, "Product already sold");
